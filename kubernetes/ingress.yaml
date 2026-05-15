@@ -1,0 +1,54 @@
+# SpamShield AI — Ingress (Nginx Ingress Controller)
+# Routes traffic to backend and frontend services
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spamshield-ingress
+  namespace: spamshield
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "30"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - spamshield.example.com
+      secretName: spamshield-tls
+  rules:
+    - host: spamshield.example.com
+      http:
+        paths:
+          # API routes → Backend
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
+          - path: /docs
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
+          - path: /health
+            pathType: Exact
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
+          # Everything else → Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000

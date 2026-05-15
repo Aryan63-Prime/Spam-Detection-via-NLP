@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════
+   SPAMSHIELD AI — GLOBAL DESIGN SYSTEM
+   Theme: "AI CYBER DEFENSE SYSTEM"
+   Palette: Dark futuristic + Neon gradients
+   ══════════════════════════════════════════════ */
+
+:root {
+  /* Background */
+  --bg-primary: #050816;
+  --bg-secondary: #070B1A;
+  --bg-tertiary: #0A0F1F;
+
+  /* Glow */
+  --glow-cyan: #00F5FF;
+  --glow-purple: #7B61FF;
+  --glow-green: #00FFA3;
+
+  /* Accent */
+  --accent-red: #FF3D71;
+  --accent-blue: #5B8CFF;
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C0CC;
+  --text-muted: #6E7A8A;
+
+  /* Noise */
+  --noise-opacity: 0.03;
+}
+
+/* ── Base Reset ───────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Noise Texture Overlay ────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ── Scrollbar ────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 255, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 255, 0.4);
+}
+
+/* ── Selection ────────────────────────────── */
+::selection {
+  background: rgba(123, 97, 255, 0.3);
+  color: #fff;
+}
+
+/* ══════════════════════════════════════════════
+   UTILITY CLASSES
+   ══════════════════════════════════════════════ */
+
+/* Glassmorphism */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glow Effects */
+  .glow-cyan {
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.15), 0 0 60px rgba(0, 245, 255, 0.05);
+  }
+  .glow-purple {
+    box-shadow: 0 0 30px rgba(123, 97, 255, 0.15), 0 0 60px rgba(123, 97, 255, 0.05);
+  }
+  .glow-green {
+    box-shadow: 0 0 30px rgba(0, 255, 163, 0.15), 0 0 60px rgba(0, 255, 163, 0.05);
+  }
+  .glow-red {
+    box-shadow: 0 0 30px rgba(255, 61, 113, 0.15), 0 0 60px rgba(255, 61, 113, 0.05);
+  }
+
+  /* Text Glow */
+  .text-glow-cyan {
+    text-shadow: 0 0 20px rgba(0, 245, 255, 0.5), 0 0 40px rgba(0, 245, 255, 0.2);
+  }
+  .text-glow-purple {
+    text-shadow: 0 0 20px rgba(123, 97, 255, 0.5), 0 0 40px rgba(123, 97, 255, 0.2);
+  }
+
+  /* Gradient Texts */
+  .gradient-text-cyber {
+    background: linear-gradient(135deg, #00F5FF, #7B61FF, #00FFA3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-text-threat {
+    background: linear-gradient(135deg, #FF3D71, #7B61FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated Border */
+  .animated-border {
+    position: relative;
+    overflow: hidden;
+  }
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from 0deg, transparent, #00F5FF, transparent, #7B61FF, transparent);
+    border-radius: inherit;
+    animation: shield-rotate 4s linear infinite;
+    z-index: -1;
+  }
+  .animated-border::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: var(--bg-secondary);
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  /* Cyber Grid */
+  .cyber-grid-bg {
+    background-image:
+      linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
+
+/* ── Shield Rotate Keyframe (for animated-border) ── */
+@keyframes shield-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Scanning Laser Effect ──────────────── */
+@keyframes scanning {
+  0% { top: 0%; opacity: 1; }
+  50% { top: 100%; opacity: 0.5; }
+  100% { top: 0%; opacity: 1; }
+}
+
+/* ── Neural Pulse ─────────────────────────── */
+@keyframes neural-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.2), inset 0 0 20px rgba(0, 245, 255, 0.05);
+  }
+  50% { 
+    box-shadow: 0 0 50px rgba(0, 245, 255, 0.4), inset 0 0 30px rgba(0, 245, 255, 0.1);
+  }
+}

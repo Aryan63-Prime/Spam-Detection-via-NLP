@@ -1,0 +1,18 @@
+# DVC-tracked files and directories
+# These entries tell DVC to version these large assets
+# outside of git while keeping .dvc pointer files in git.
+
+# Raw datasets
+datasets/raw/**
+
+# Processed datasets
+datasets/processed/**
+
+# Trained model artifacts
+models/**/*.pkl
+models/**/*.pt
+models/**/*.onnx
+models/**/*.joblib
+
+# MLflow runs (tracked separately)
+mlruns/

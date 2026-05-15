@@ -1,0 +1,79 @@
+# ── Python ───────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.Python
+env/
+venv/
+.venv/
+
+# ── IDE ──────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ── Environment ──────────────────────────────
+.env
+.env.local
+.env.production
+configs/.env
+
+# ── Data & Models (large files) ──────────────
+datasets/raw/
+datasets/cache/
+models/*.pkl
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.bin
+models/*.h5
+models/*.joblib
+*.safetensors
+
+# ── ML Artifacts ─────────────────────────────
+mlruns/
+mlflow-artifacts/
+dvc.lock
+*.dvc
+
+# ── Logs ─────────────────────────────────────
+logs/
+*.log
+
+# ── Node.js (Frontend) ──────────────────────
+node_modules/
+.next/
+out/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Docker ───────────────────────────────────
+docker-compose.override.yml
+
+# ── OS ───────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Testing ──────────────────────────────────
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# ── Misc ─────────────────────────────────────
+*.bak
+*.tmp
+*.temp

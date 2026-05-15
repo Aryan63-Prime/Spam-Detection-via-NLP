@@ -1,0 +1,20 @@
+# ══════════════════════════════════════════════════════════
+# SpamShield AI — Nginx Reverse Proxy
+# Routes: /api → backend, / → frontend
+# ══════════════════════════════════════════════════════════
+FROM nginx:1.27-alpine
+
+# Security: remove default config
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Security headers via nginx config (already included)
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:80/health || exit 1
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

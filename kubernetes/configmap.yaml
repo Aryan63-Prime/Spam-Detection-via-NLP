@@ -1,0 +1,29 @@
+# SpamShield AI — ConfigMap + Secrets
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: spamshield
+data:
+  ENVIRONMENT: "production"
+  DB_POSTGRES_HOST: "postgres"
+  DB_POSTGRES_PORT: "5432"
+  DB_POSTGRES_DB: "spam_detection"
+  DB_REDIS_HOST: "redis"
+  DB_REDIS_PORT: "6379"
+  ML_USE_GPU: "false"
+  ML_DEFAULT_MODEL: "logistic_regression"
+  MON_LOG_LEVEL: "INFO"
+  MON_LOG_FORMAT: "json"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: spamshield
+type: Opaque
+stringData:
+  DB_POSTGRES_USER: "spam_user"
+  DB_POSTGRES_PASSWORD: "REPLACE_WITH_STRONG_PASSWORD"
+  SEC_JWT_SECRET_KEY: "REPLACE_WITH_SECURE_256BIT_SECRET"

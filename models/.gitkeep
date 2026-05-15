@@ -1,0 +1,2 @@
+# This directory stores trained model artifacts.
+# Run `python -m ml.training.train_traditional` to populate.

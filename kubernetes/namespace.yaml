@@ -1,0 +1,8 @@
+# SpamShield AI — Kubernetes Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spamshield
+  labels:
+    app.kubernetes.io/name: spamshield
+    app.kubernetes.io/part-of: spamshield-ai
