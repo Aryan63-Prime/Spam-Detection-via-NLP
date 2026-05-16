@@ -77,3 +77,5 @@ htmlcov/
 *.bak
 *.tmp
 *.temp
+CLAUDE.md
+UI.md
