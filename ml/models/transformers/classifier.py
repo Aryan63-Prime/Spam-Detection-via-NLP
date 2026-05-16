@@ -132,15 +132,10 @@ class TransformerSpamClassifier(BaseModel):
             Training metrics dict.
         """
         from transformers import Trainer, TrainingArguments
-        import importlib
+        import sys, importlib
+        # Force-evict local datasets/ from cache to import HuggingFace datasets
+        _cached = {k: sys.modules.pop(k) for k in list(sys.modules) if k == "datasets" or k.startswith("datasets.")}
         hf_datasets = importlib.import_module("datasets")
-        # Fallback: if local datasets/ shadows HF, force reload from site-packages
-        if not hasattr(hf_datasets, "Dataset"):
-            import sys
-            saved = sys.modules.pop("datasets", None)
-            hf_datasets = importlib.import_module("datasets")
-            if saved is not None:
-                sys.modules["datasets_local"] = saved
         Dataset = hf_datasets.Dataset
 
         start = time.perf_counter()
@@ -252,14 +247,9 @@ class TransformerSpamClassifier(BaseModel):
 
     def _create_hf_dataset(self, texts, labels):
         """Create a Hugging Face Dataset with tokenized inputs."""
-        import importlib
+        import sys, importlib
+        _cached = {k: sys.modules.pop(k) for k in list(sys.modules) if k == "datasets" or k.startswith("datasets.")}
         hf_datasets = importlib.import_module("datasets")
-        if not hasattr(hf_datasets, "Dataset"):
-            import sys
-            saved = sys.modules.pop("datasets", None)
-            hf_datasets = importlib.import_module("datasets")
-            if saved is not None:
-                sys.modules["datasets_local"] = saved
         Dataset = hf_datasets.Dataset
 
         texts_list = list(texts) if not isinstance(texts, list) else texts
