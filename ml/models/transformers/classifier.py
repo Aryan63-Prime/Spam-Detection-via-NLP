@@ -132,10 +132,14 @@ class TransformerSpamClassifier(BaseModel):
             Training metrics dict.
         """
         from transformers import Trainer, TrainingArguments
-        import sys, importlib
-        # Force-evict local datasets/ from cache to import HuggingFace datasets
+        import sys, importlib, os
+        # Temporarily hide local datasets/ so HF datasets is imported from site-packages
+        _hidden = [p for p in sys.path if os.path.isdir(os.path.join(p, "datasets")) and os.path.isfile(os.path.join(p, "datasets", "__init__.py"))]
+        for p in _hidden:
+            sys.path.remove(p)
         _cached = {k: sys.modules.pop(k) for k in list(sys.modules) if k == "datasets" or k.startswith("datasets.")}
         hf_datasets = importlib.import_module("datasets")
+        sys.path.extend(_hidden)  # Restore paths
         Dataset = hf_datasets.Dataset
 
         start = time.perf_counter()
@@ -247,9 +251,13 @@ class TransformerSpamClassifier(BaseModel):
 
     def _create_hf_dataset(self, texts, labels):
         """Create a Hugging Face Dataset with tokenized inputs."""
-        import sys, importlib
+        import sys, importlib, os
+        _hidden = [p for p in sys.path if os.path.isdir(os.path.join(p, "datasets")) and os.path.isfile(os.path.join(p, "datasets", "__init__.py"))]
+        for p in _hidden:
+            sys.path.remove(p)
         _cached = {k: sys.modules.pop(k) for k in list(sys.modules) if k == "datasets" or k.startswith("datasets.")}
         hf_datasets = importlib.import_module("datasets")
+        sys.path.extend(_hidden)
         Dataset = hf_datasets.Dataset
 
         texts_list = list(texts) if not isinstance(texts, list) else texts
