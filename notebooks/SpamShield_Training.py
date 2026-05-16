@@ -297,6 +297,21 @@ for r in sorted(dl_results, key=lambda x: x["f1"], reverse=True):
 # Using DistilBERT (best speed/accuracy tradeoff)
 # Change model_name to "bert" or "roberta" for higher accuracy
 
+# --- Fix: local datasets/ folder shadows HuggingFace datasets library ---
+import sys, os
+# Temporarily rename local datasets/ so Python finds the HF package
+os.rename("datasets", "_datasets_local")
+# Clear cached modules
+for k in list(sys.modules):
+    if k == "datasets" or k.startswith("datasets."):
+        del sys.modules[k]
+# Pre-import HF datasets (now finds site-packages version)
+import datasets as _hf_datasets
+print(f"✅ HuggingFace datasets loaded: v{_hf_datasets.__version__}")
+# Rename back
+os.rename("_datasets_local", "datasets")
+# --- End fix ---
+
 from ml.models.transformers.classifier import TransformerSpamClassifier
 
 print("=" * 60)
