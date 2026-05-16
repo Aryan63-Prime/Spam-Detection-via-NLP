@@ -132,7 +132,16 @@ class TransformerSpamClassifier(BaseModel):
             Training metrics dict.
         """
         from transformers import Trainer, TrainingArguments
-        from datasets import Dataset
+        import importlib
+        hf_datasets = importlib.import_module("datasets")
+        # Fallback: if local datasets/ shadows HF, force reload from site-packages
+        if not hasattr(hf_datasets, "Dataset"):
+            import sys
+            saved = sys.modules.pop("datasets", None)
+            hf_datasets = importlib.import_module("datasets")
+            if saved is not None:
+                sys.modules["datasets_local"] = saved
+        Dataset = hf_datasets.Dataset
 
         start = time.perf_counter()
         self._load_pretrained()
@@ -241,9 +250,17 @@ class TransformerSpamClassifier(BaseModel):
 
         return np.concatenate(all_probs, axis=0)
 
-    def _create_hf_dataset(self, texts, labels) -> "Dataset":
+    def _create_hf_dataset(self, texts, labels):
         """Create a Hugging Face Dataset with tokenized inputs."""
-        from datasets import Dataset
+        import importlib
+        hf_datasets = importlib.import_module("datasets")
+        if not hasattr(hf_datasets, "Dataset"):
+            import sys
+            saved = sys.modules.pop("datasets", None)
+            hf_datasets = importlib.import_module("datasets")
+            if saved is not None:
+                sys.modules["datasets_local"] = saved
+        Dataset = hf_datasets.Dataset
 
         texts_list = list(texts) if not isinstance(texts, list) else texts
         labels_list = list(labels) if not isinstance(labels, list) else labels
