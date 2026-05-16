@@ -153,7 +153,7 @@ class TransformerSpamClassifier(BaseModel):
             learning_rate=self.lr,
             warmup_ratio=self.warmup_ratio,
             weight_decay=self.weight_decay,
-            evaluation_strategy="epoch" if eval_dataset else "no",
+            eval_strategy="epoch" if eval_dataset else "no",
             save_strategy="epoch",
             load_best_model_at_end=True if eval_dataset else False,
             metric_for_best_model="f1" if eval_dataset else None,
