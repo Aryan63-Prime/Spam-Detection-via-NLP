@@ -299,17 +299,23 @@ for r in sorted(dl_results, key=lambda x: x["f1"], reverse=True):
 
 # --- Fix: local datasets/ folder shadows HuggingFace datasets library ---
 import sys, os
-# Temporarily rename local datasets/ so Python finds the HF package
-os.rename("datasets", "_datasets_local")
-# Clear cached modules
-for k in list(sys.modules):
-    if k == "datasets" or k.startswith("datasets."):
-        del sys.modules[k]
-# Pre-import HF datasets (now finds site-packages version)
-import datasets as _hf_datasets
-print(f"✅ HuggingFace datasets loaded: v{_hf_datasets.__version__}")
-# Rename back
-os.rename("_datasets_local", "datasets")
+_hf_already_loaded = "datasets" in sys.modules and hasattr(sys.modules["datasets"], "Dataset")
+if not _hf_already_loaded:
+    # Temporarily rename local datasets/ so Python finds the HF package
+    if os.path.isdir("datasets") and not os.path.isdir("_datasets_local"):
+        os.rename("datasets", "_datasets_local")
+    # Clear only our local datasets from cache (not HF)
+    for k in list(sys.modules):
+        if k == "datasets" or k.startswith("datasets."):
+            del sys.modules[k]
+    # Import the real HF datasets from site-packages
+    import datasets as _hf_datasets
+    print(f"✅ HuggingFace datasets loaded: v{_hf_datasets.__version__}")
+    # Rename back
+    if os.path.isdir("_datasets_local") and not os.path.isdir("datasets"):
+        os.rename("_datasets_local", "datasets")
+else:
+    print("✅ HuggingFace datasets already loaded.")
 # --- End fix ---
 
 from ml.models.transformers.classifier import TransformerSpamClassifier
